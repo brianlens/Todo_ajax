@@ -27,11 +27,13 @@ function toggleDone() {
     });
 }
 
+
 function updateCounters() {
   $("#total-count").html($(".todo").length);
   $("#completed-count").html($(".completed").length);
   $("#todo-count").html($(".todo").length - $(".completed").length);
 }
+
 
 function createTodo(title) {
   var newTodo = { title: title, completed: false };
@@ -83,6 +85,7 @@ function createTodo(title) {
     });
 }
 
+
 function showError(message) {
   $("#todo_title").addClass("error");
     var errorElement = $("<small></small>")
@@ -90,6 +93,7 @@ function showError(message) {
     .html(message);
   $(errorElement).appendTo('form.field');
 }
+
 
 function resetErrors() {
   $("#error_message").remove();
@@ -105,6 +109,7 @@ function submitTodo(event) {
   updateCounters();
 }
 
+
 function cleanUpDoneTodos(event) {
   event.preventDefault();
   $.when($(".completed").remove())
@@ -117,3 +122,27 @@ $("form").bind('submit', submitTodo);
 $("#clean-up").bind('click', cleanUpDoneTodos);
 updateCounters();
 });
+
+
+function cleanUpDoneTodos(event) {
+  event.preventDefault();
+
+  $.each($(".completed"), function(index, listItem) {
+    $listItem = $(listItem);
+    todoId = $(listItem).data('id');
+    deleteTodo(todoId);
+    $listItem.remove();
+  });
+}
+
+function deleteTodo(todoId) {
+  $.ajax({
+    type: "DELETE",
+    url: "/todos/" + todoId + ".json",
+    contentType: "application/json",
+    dataType: "json"})
+
+    .done(function(data) {
+      updateCounters();
+    });
+}
