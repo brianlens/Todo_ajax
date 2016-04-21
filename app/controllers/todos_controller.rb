@@ -29,7 +29,7 @@ class TodosController < ApplicationController
 
     respond_to do |format|
       if @todo.save
-        format.html { redirect_to todos_path, notice: 'Well done, almost there.' }
+        format.html { redirect_to root_path, notice: 'Well done, almost there.' }
         format.json { render :show, status: :created, location: @todo }
       else
         format.html { render :new }
